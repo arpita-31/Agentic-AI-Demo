@@ -58,24 +58,8 @@ Google Gemini API
 Google Calendar API
 Google Sheets API
 Telegram Bot API
-Workflow Architecture
-Telegram Trigger
-        ↓
-     AI Agent
-        ↓
- Parse Intent JSON
-        ↓
-      Switch
-     /   |   \
-    /    |    \
-Study  Event  Complete
-  ↓      ↓       ↓
-Sheets Calendar Update
-  ↓      ↓       ↓
-Calendar  ↓       ↓
-   \      |      /
-    \     |     /
-     Telegram Reply
+
+
 Future Enhancements 🚀
 Automatic task completion tracking
 Daily Telegram reminders
