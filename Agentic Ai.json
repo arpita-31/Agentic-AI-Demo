@@ -1,0 +1,476 @@
+{
+  "name": "My workflow 5",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are Phoenix Planner AI, an intelligent academic and productivity assistant.\n\nCurrent year: 2026.\n\nThe user may provide:\n\n* Study goals\n* Exam dates\n* Subjects\n* Modules\n* Available study hours\n* Available study days\n* Webinars\n* Workshops\n* Meetings\n* Interviews\n* Personal events\n* Task completion updates\n\nFirst determine the user's intent.\n\nPossible intents:\n\n1. create_study_plan\n2. add_event\n3. complete_task\n4. delete_goal\n5. reschedule_task\n\nCurrent date should be treated as the actual current date.\n\nFor any webinar, meeting, workshop, event, reminder, or study task:\n- Never generate dates in the past.\n- If the user says \"tomorrow\", calculate the correct future date.\n- If the user says \"next Monday\", calculate the next future Monday.\n\nRules:\n\n1. Always identify the intent.\n2. Never create dates in the past.\n3. Return ONLY valid JSON.\n4. Do not include explanations outside JSON.\n\nFor create_study_plan:\n\n* Calculate days remaining.\n* Allocate study hours realistically.\n* Break large modules into smaller topics.\n* Give harder topics more time.\n* Include revision sessions.\n* Use all available study time efficiently.\n* Do not leave large unused gaps unless necessary.\n* Do not create overlapping study sessions.\n* Generate one task per study session.\n\nReturn:\n\n{\n\"intent\": \"create_study_plan\",\n\"tasks\": [\n{\n\"goal_id\": \"DSA_001\",\n\"subject\": \"DSA\",\n\"module\": \"Arrays\",\n\"topic\": \"Array Basics\",\n\"date\": \"YYYY-MM-DD\",\n\"start_time\": \"19:00\",\n\"end_time\": \"20:00\",\n\"priority\": \"High\",\n\"status\": \"Pending\"\n}\n]\n}\n\nFor add_event:\n\nReturn:\n\n{\n\"intent\": \"add_event\",\n\"event\": {\n\"title\": \"AWS Webinar\",\n\"date\": \"YYYY-MM-DD\",\n\"start_time\": \"19:00\",\n\"end_time\": \"20:30\",\n\"event_type\": \"webinar\"\n}\n}\n\nFor complete_task:\n\nReturn:\n\n{\n\"intent\": \"complete_task\",\n\"task_name\": \"Arrays\"\n}\n\nFor delete_goal:\n\nReturn:\n\n{\n\"intent\": \"delete_goal\",\n\"goal_id\": \"DSA_001\"\n}\n\nFor reschedule_task:\n\nReturn:\n\n{\n\"intent\": \"reschedule_task\",\n\"task_name\": \"Arrays\",\n\"new_date\": \"YYYY-MM-DD\",\n\"new_start_time\": \"19:00\",\n\"new_end_time\": \"20:00\"\n}\n}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        272,
+        16
+      ],
+      "id": "ef6262c9-462d-4d19-b943-929699ef7444",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        16,
+        192
+      ],
+      "id": "3a058fa3-1789-4238-8dbf-fd5e28365540",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "v8R5i3sWud5IfrDI",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1eL7xf6QyE3iI0Xcpk5J4aIqF9-iDp8hO6fWPdLn-KSU",
+          "mode": "list",
+          "cachedResultName": "Study Planner",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1eL7xf6QyE3iI0Xcpk5J4aIqF9-iDp8hO6fWPdLn-KSU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1eL7xf6QyE3iI0Xcpk5J4aIqF9-iDp8hO6fWPdLn-KSU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Subject": "={{ $json.subject }}",
+            "Module": "={{ $json.module }}",
+            "Topic": "={{ $json.topic }}",
+            "Date": "={{ $json.date }}",
+            "Start Time": "={{ $json.start_time }}",
+            "End Time": "={{ $json.end_time }}",
+            "Status": "={{ $json.status }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Module",
+              "displayName": "Module",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Topic",
+              "displayName": "Topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Start Time",
+              "displayName": "Start Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "End Time",
+              "displayName": "End Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1168,
+        48
+      ],
+      "id": "53201e1a-3b40-4e87-9435-ad4186d51413",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "uaMiRmfXIRtfYUY1",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = JSON.parse($json.output);\n\nreturn data.tasks.map(task => {\n  return {\n    json: task\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        304
+      ],
+      "id": "4a7600e1-8f55-4fe9-9714-0b90f9e3859a",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "arpitapatil315@gmail.com",
+          "mode": "list",
+          "cachedResultName": "arpitapatil315@gmail.com"
+        },
+        "start": "={{ $json.date + 'T' + $json.start_time + ':00' }}",
+        "end": "={{ $json.date + 'T' + $json.end_time + ':00' }}",
+        "additionalFields": {
+          "description": "={{ $json.Topic }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1344,
+        64
+      ],
+      "id": "d411fa53-60ed-441e-9874-817d88bd849a",
+      "name": "Create an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8Qt32xMsUFQJ2XKg",
+          "name": "Google Calendar OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.intent}}",
+                    "rightValue": "add_event",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "952e8250-d6e2-4b3e-bfe2-89815b79a77a"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "3d732760-e1bf-48aa-986a-155e0260906e",
+                    "leftValue": "={{$json.intent}}",
+                    "rightValue": "create_study_plan",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "20c2d848-e3cb-4100-b43d-492a1805afdf",
+                    "leftValue": "",
+                    "rightValue": "complete_task",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        672,
+        -16
+      ],
+      "id": "a13c8d45-76f0-4aef-8534-8f26edd91056",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "arpitapatil315@gmail.com",
+          "mode": "list",
+          "cachedResultName": "arpitapatil315@gmail.com"
+        },
+        "start": "={{ $json.event.date + 'T' + $json.event.start_time + ':00' }}",
+        "end": "={{ $json.event.date + 'T' + $json.event.end_time + ':00' }}",
+        "additionalFields": {
+          "description": "={{ $json.event.event_type }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1120,
+        -144
+      ],
+      "id": "345f5d3d-9789-4e06-a355-67ef40df93c2",
+      "name": "Create an event1",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8Qt32xMsUFQJ2XKg",
+          "name": "Google Calendar OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nreturn data.tasks.map(task => ({\n  json: task\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        992,
+        16
+      ],
+      "id": "f385426f-d288-401a-8a60-2c31030b0162",
+      "name": "Task Splitter"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = JSON.parse($input.first().json.output);\n\nreturn [\n  {\n    json: data\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        128
+      ],
+      "id": "711b9327-da88-4981-9afd-31c0b70f1d80",
+      "name": "Intent"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        112,
+        16
+      ],
+      "id": "4bda49f6-68e2-4a2f-b1d9-3c8760692e82",
+      "name": "Telegram Trigger",
+      "webhookId": "8aa22ee5-5da7-4c28-a51f-d10f9c8139dc",
+      "credentials": {
+        "telegramApi": {
+          "id": "Zi4fu1Mcm9AG3LT7",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Intent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        []
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Create an event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Create an event1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Task Splitter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Task Splitter": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Intent": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event1": {
+      "main": [
+        []
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "50814db3-3598-4bc9-ad58-80fc87eaa12d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1affb0873d043d065f6b60ddfd80639195905f14837f009fdf7ad2807212e086"
+  },
+  "nodeGroups": [],
+  "id": "UYJU9OrMqzixagXQ",
+  "tags": []
+}
